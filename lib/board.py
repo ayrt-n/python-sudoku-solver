@@ -46,6 +46,10 @@ class Sudoku:
     def is_empty_cell(self, row, col):
         return self.board[row][col] == 0
 
+    def reset_board(self):
+        self.board = [[v for v in row] for row in self.initial_board]
+        self.properties = self.create_board_properties(self.initial_board)
+
     # Takes board and returns hash containing properties of board for easy validation of row, col, and box values
     def create_board_properties(self, board):
         properties = {}
