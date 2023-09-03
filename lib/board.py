@@ -1,6 +1,5 @@
 class Sudoku:
     """Class representation of sudoku board"""
-
     def __init__(self, board):
         """
         Initialize sudoku instance
