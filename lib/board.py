@@ -1,16 +1,22 @@
-import copy
-
 class Sudoku:
-    """Class representation of sudoku board. Used to check whether guess is valid and keep track of guesses."""
+    """Class representation of sudoku board"""
 
-    # Takes 2D array of board and creates board, initial board, and board properties instance variables
     def __init__(self, board):
+        """
+        Initialize sudoku instance
+        Params: board ([][] of int)
+        Returns: None
+        """
         self.board = board
         self.initial_board = [[v for v in row] for row in board]
         self.properties = self.create_board_properties(board)
     
-    # Insert value on board and update board properties - Return bool if successful
     def guess(self, row, col, value):
+        """
+        Insert value on board and update board properties
+        Params: row (int), col (int), value (int)
+        Returns: bool whether successful
+        """
         if self.initial_board[row][col] > 0:
             return False
         
@@ -22,8 +28,12 @@ class Sudoku:
         self.properties['col'][col][value] = True
         self.properties['box'][3 * (row // 3) + (col // 3)][value] = True
 
-    # Remove value from board and board properties - Return bool if successful
     def remove_guess(self, row, col):
+        """
+        Remove value from board and board properties
+        Params: row (int), col (int)
+        Returns: bool if successful
+        """
         if self.initial_board[row][col] > 0:
             return False
         
@@ -32,9 +42,14 @@ class Sudoku:
         self.properties['row'][row][value] = False
         self.properties['col'][col][value] = False
         self.properties['box'][3 * (row // 3) + (col // 3)][value] = False
+        return True
 
-    # Return bool if guess is valid. In this case valid means the value does not yet exist in this row/col/box
     def is_valid_guess(self, row, col, value):
+        """
+        Check if guess is valid (e.g., value does not exist yet in row/col/box)
+        Params: row (int), col (int), value (int)
+        Returns: bool if guess is valid
+        """
         if (self.properties['row'][row][value] or
                 self.properties['col'][col][value] or
                 self.properties['box'][3 * (row // 3) + (col // 3)][value]):
@@ -42,16 +57,29 @@ class Sudoku:
         
         return True
     
-    # Return bool if cell if empty
     def is_empty_cell(self, row, col):
+        """
+        Check if cell if empty
+        Params: row (int), col (int)
+        Returns: bool if cell is empty
+        """
         return self.board[row][col] == 0
 
     def reset_board(self):
+        """
+        Reset board and properties to the intitial board
+        Params: None
+        Returns: None
+        """
         self.board = [[v for v in row] for row in self.initial_board]
         self.properties = self.create_board_properties(self.initial_board)
 
-    # Takes board and returns hash containing properties of board for easy validation of row, col, and box values
     def create_board_properties(self, board):
+        """
+        Create properties hash for easy lookup and validation of guesses made in each row, col, or box
+        Params: board ([][] of int)
+        Returns: {}
+        """
         properties = {}
         properties['row'], properties['col'], properties['box'] = [[False for v in range(10)] for i in range(9)], [[False for v in range(10)] for i in range(9)], [[False for v in range(10)] for i in range(9)]
 
