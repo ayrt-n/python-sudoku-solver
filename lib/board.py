@@ -22,6 +22,7 @@ class Sudoku:
         self.properties['col'][col][value] = True
         self.properties['box'][3 * (row // 3) + (col // 3)][value] = True
 
+    # Remove value from board and board properties - Return bool if successful
     def remove_guess(self, row, col):
         if self.initial_board[row][col] > 0:
             return False
@@ -31,6 +32,19 @@ class Sudoku:
         self.properties['row'][row][value] = False
         self.properties['col'][col][value] = False
         self.properties['box'][3 * (row // 3) + (col // 3)][value] = False
+
+    # Return bool if guess is valid. In this case valid means the value does not yet exist in this row/col/box
+    def is_valid_guess(self, row, col, value):
+        if (self.properties['row'][row][value] or
+                self.properties['col'][col][value] or
+                self.properties['box'][3 * (row // 3) + (col // 3)][value]):
+            return False
+        
+        return True
+    
+    # Return bool if cell if empty
+    def is_empty_cell(self, row, col):
+        return self.board[row][col] == 0
 
     # Takes board and returns hash containing properties of board for easy validation of row, col, and box values
     def create_board_properties(self, board):
@@ -60,14 +74,6 @@ if __name__ == '__main__':
         [0, 0, 0, 0, 8, 0, 0, 7, 9]
     ]
     sudoku = Sudoku(board)
-    sudoku.guess(0, 2, 9)
-    print(sudoku.properties['row'][0])
-
-    for row in sudoku.board:
-        print(row)
-
-    sudoku.remove_guess(0, 2)
-    print(sudoku.properties['row'][0])
 
     for row in sudoku.board:
         print(row)
