@@ -1,5 +1,3 @@
-import sudoku
-
 class Backtrack:
     """Sudoku solver using backtracking algorithm"""
     def __init__(self, sudoku):
