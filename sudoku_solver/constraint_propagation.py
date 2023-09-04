@@ -1,5 +1,3 @@
-import sudoku
-
 class ConstraintPropagation:
     def __init__(self, sudoku):
         self.sudoku = sudoku
