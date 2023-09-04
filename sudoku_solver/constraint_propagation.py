@@ -1,4 +1,5 @@
 class ConstraintPropagation:
+    """Sudoku solver using constraint propagation algorithm"""
     def __init__(self, sudoku):
         self.sudoku = sudoku
         self.generate_constraints()
