@@ -73,6 +73,24 @@ class Sudoku:
         self.board = [[v for v in row] for row in self.initial_board]
         self.properties = self.create_board_properties(self.initial_board)
 
+    def is_complete(self):
+        """
+        Check if board is solved
+        Params: None
+        Returns: bool if board valid and complete
+        """
+        validation = {}
+        validation['row'], validation['col'], validation['box'] = [[False for v in range(10)] for i in range(9)], [[False for v in range(10)] for i in range(9)], [[False for v in range(10)] for i in range(9)]
+
+        for r in range(9):
+            for c, val in enumerate(self.board[r]):
+                b = 3 * (r // 3) + (c // 3)
+                if val == 0 or validation['row'][r][val] or validation['col'][c][val] or validation['box'][b][val]:
+                    return False
+                validation['row'][r][val], validation['col'][c][val], validation['box'][b][val] = True, True, True
+        
+        return True
+
     def create_board_properties(self, board):
         """
         Create properties hash for easy lookup and validation of guesses made in each row, col, or box
