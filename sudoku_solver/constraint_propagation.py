@@ -15,7 +15,7 @@ class ConstraintPropagation:
             progress = [self.propagate_single_constraints(),
                         self.propagate_row_constraints(),
                         self.propagate_col_constraints(),
-                        self.progagate_box_constraints()]
+                        self.propagate_box_constraints()]
         
         if self.sudoku.is_complete():
             return [True, self.sudoku.board]
@@ -23,6 +23,125 @@ class ConstraintPropagation:
             return [True, self.sudoku.board]
         else:
             return [False, self.sudoku.initial_board]
+
+    def dfs(self, index):
+        """
+        Attempts to solve sudoku using DFS and iterating through the constraints matrix for possible values
+        Params: index (int)
+        Returns: bool if solved
+        """
+        if index >= 81:
+            return True
+        
+        row = index // 9
+        col = index % 9
+
+        if not self.sudoku.is_empty_cell(row, col):
+            return self.dfs(index + 1)
+        
+        for val in self.constraints[row][col]:
+            if not self.sudoku.is_valid_guess(row, col, val):
+                continue
+            self.sudoku.guess(row, col, val)
+            if self.dfs(index + 1):
+                return True
+            self.sudoku.remove_guess(row, col)
+
+        return False
+    
+    def propagate_single_constraints(self):
+        """
+        Iterate through constraints matrix to find cells with only one possible value. Fill in those values and propagate the constraint
+        Params: None
+        Returns: bool if changes made (e.g., single value constraint found that has not been filled in)
+        """
+        changes_made = False
+
+        for r in range(9):
+            for c, constraint in enumerate(self.constraints[r]):
+                if (len(constraint) > 1 or not self.sudoku.is_empty_cell(r, c) or not
+                    self.sudoku.is_valid_guess(r, c, list(constraint)[0])):
+                    continue
+                changes_made = True
+                self.sudoku.guess(r, c, list(constraint)[0])
+                self.propagate_single_constraint(constraint, r, c)
+        
+        return changes_made
+    
+    def propagate_row_constraints(self):
+        """
+        Iterate through rows looking for naked sets (doubles, triples, quads) and propagate constraint if found
+        Params: None
+        Returns: bool if change made (e.g., naked set found and propagating the constraint changed other constraints)
+        """
+        changes_made = False
+
+        for row in range(9):
+            sets = {}
+            for col in range(9):
+                if frozenset(self.constraints[row][col]) in sets:
+                    sets[frozenset(self.constraints[row][col])] += 1
+                sets[frozenset(self.constraints[row][col])] = 1
+
+            for constraint, count in sets.items():
+                num_constraints = len(constraint)
+                if (num_constraints < 2 or num_constraints > 4 or num_constraints != count):
+                    continue
+                if self.propagate_row_constraint(constraint, row):
+                    changes_made = True
+
+        return changes_made
+    
+    def propagate_col_constraints(self):
+        """
+        Iterate through columns looking for naked sets (doubles, triples, quads) and propagate constraint if found
+        Params: None
+        Returns: bool if change made (e.g., naked set found and propagating the constraint changed other constraints)
+        """
+        changes_made = False
+
+        for col in range(9):
+            sets = {}
+            for row in range(9):
+                if frozenset(self.constraints[row][col]) in sets:
+                    sets[frozenset(self.constraints[row][col])] += 1
+                sets[frozenset(self.constraints[row][col])] = 1
+
+            for constraint, count in sets.items():
+                num_constraints = len(constraint)
+                if (num_constraints < 2 or num_constraints > 4 or num_constraints != count):
+                    continue
+                if self.propagate_col_constraint(constraint, row):
+                    changes_made = True
+
+        return changes_made
+
+    def propagate_box_constraints(self):
+        """
+        Iterate through boxes looking for naked sets (doubles, triples, quads) and propagate constraint if found
+        Params: None
+        Returns: bool if change made (e.g., naked set found and propagating the constraint changed other constraints)
+        """
+        changes_made = False
+        box_ranges = [range(0, 3), range(3, 6), range(6, 9)]
+
+        for rows in box_ranges:
+            for cols in box_ranges:
+                sets = {}
+                for row in rows:
+                    for col in cols:
+                        if frozenset(self.constraints[row][col]) in sets:
+                            sets[frozenset(self.constraints[row][col])] += 1
+                        sets[frozenset(self.constraints[row][col])] = 1
+
+                for constraint, count in sets.items():
+                    num_constraints = len(constraint)
+                    if (num_constraints < 2 or num_constraints > 4 or num_constraints != count):
+                        continue
+                    if self.propagate_box_constraint(constraint, row):
+                        changes_made = True
+
+        return changes_made
 
     def propagate_single_constraint(self, constraint, row, col):
         """
