@@ -3,6 +3,7 @@ from imutils import contours
 import pytesseract
 
 class SudokuImageProcessor:
+    '''Sudoku image processor, able to take image of sudoku board and convert into array representation of values'''
     def __init__(self, image):
         '''Initialize with image of sudoku board
         On initialization, estimates acceptable size of sudoku cells (cell_min and cell_max) based on area of image divided by 81 (number of sudoku cells) and scalar
