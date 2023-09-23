@@ -81,12 +81,3 @@ class SudokuImageProcessor:
                 if value == '': continue
                 res[i][j] = int(value)
         return res
-
-if __name__ == '__main__':
-    img_path = './images/sudoku_5.jpg'
-    image = cv.imread(img_path)
-    sip = SudokuImageProcessor(image)
-    board = sip.convert_to_array()
-    for r in board: print(r)
-    cv.imshow('board', image)
-    cv.waitKey(0)
