@@ -17,8 +17,7 @@ class SudokuImageProcessor:
         Returns: sudoku board [][]
         '''
         inv_binary_image = self.preprocess()
-        cnts = self.find_contours(inv_binary_image)
-        cnts = self.sort_contours(cnts)
+        cnts = self.find_sudoku_cells(inv_binary_image)
         return self.extract_cell_values(cv.bitwise_not(inv_binary_image), cnts)
 
     def preprocess(self):
@@ -46,6 +45,7 @@ class SudokuImageProcessor:
     def sort_sudoku_cell_contours(self, cnts):
         '''Takes contours and tries to identify the contours associated with sudoku cells and then sorts and returns the associated contours
         Cell contours are sorted left-to-right and top-to-bottom, e.g., the top left sudoku cell is in position [0][0] while the bottom right is in [8][8]
+        To identify sudoku cells, algorithm ignores contours below a min area and above a max area, determined by dividing the image 81 cells and adjusting by a scaler (see __init__)
         Params: contours (vector of points)
         Returns: [][] sorted array of contours associated with sudoku cells
         '''
