@@ -1,8 +1,6 @@
 import cv2 as cv
 from imutils import contours
 import pytesseract
-import sudoku
-import constraint_propagation
 
 class SudokuImageProcessor:
     def __init__(self, image):
