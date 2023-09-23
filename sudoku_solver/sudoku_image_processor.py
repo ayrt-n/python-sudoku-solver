@@ -1,6 +1,8 @@
 import cv2 as cv
 from imutils import contours
 import pytesseract
+import sudoku
+import constraint_propagation
 
 class SudokuImageProcessor:
     def __init__(self, image):
@@ -76,7 +78,8 @@ class SudokuImageProcessor:
                 x, y, w, h = cv.boundingRect(c)
                 cv.rectangle(binary_image, (x, y), (x + w, y + h), (256, 256, 256), 7)
                 value = pytesseract.image_to_string(binary_image[y:y + h, x:x + w], lang='eng', config='--psm 6 --oem 3 -c tessedit_char_whitelist=123456789').rstrip()
-                res[i][j] = value
+                if value == '': continue
+                res[i][j] = int(value)
         return res
 
 if __name__ == '__main__':
