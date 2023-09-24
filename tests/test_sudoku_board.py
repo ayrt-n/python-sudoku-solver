@@ -1,7 +1,7 @@
-from sudoku_solver.sudoku import Sudoku
+from sudoku_solver.sudoku_board import SudokuBoard
 
 class TestSudoku:
-    sudoku = Sudoku([
+    sudoku = SudokuBoard([
         [5, 3, 0, 0, 7, 0, 0, 0, 0],
         [6, 0, 0, 1, 9, 5, 0, 0, 0],
         [0, 9, 8, 0, 0, 0, 0, 6, 0],
@@ -57,7 +57,7 @@ class TestSudoku:
         assert self.sudoku.is_complete() == False
 
     def test_invalid_values_is_not_complete(self):
-        invalid_board = Sudoku([
+        invalid_board = SudokuBoard([
             [5, 6, 5, 6, 7, 8, 9, 1, 2],
             [6, 7, 2, 1, 9, 5, 3, 4, 8],
             [1, 9, 8, 3, 4, 2, 5, 6, 7],
@@ -71,7 +71,7 @@ class TestSudoku:
         assert invalid_board.is_complete() == False
 
     def test_valid_solution_is_complete(self):
-        solved_board = Sudoku([
+        solved_board = SudokuBoard([
             [5, 3, 4, 6, 7, 8, 9, 1, 2],
             [6, 7, 2, 1, 9, 5, 3, 4, 8],
             [1, 9, 8, 3, 4, 2, 5, 6, 7],

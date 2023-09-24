@@ -1,4 +1,4 @@
-class Sudoku:
+class SudokuBoard:
     """Class representation of sudoku board"""
     def __init__(self, board):
         """

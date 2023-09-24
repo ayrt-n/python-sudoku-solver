@@ -1,5 +1,5 @@
 from sudoku_solver.backtrack import Backtrack
-from sudoku_solver.sudoku import Sudoku
+from sudoku_solver.sudoku_board import SudokuBoard
 
 class TestBacktrack:
     def test_solve_easy(self):
@@ -25,7 +25,7 @@ class TestBacktrack:
             [2, 8, 7, 4, 1, 9, 6, 3, 5],
             [3, 4, 5, 2, 8, 6, 1, 7, 9]
         ]
-        solver = Backtrack(Sudoku(board))
+        solver = Backtrack(SudokuBoard(board))
         assert solver.solve() == [True, solution]
 
     def test_solve_medium(self):
@@ -51,7 +51,7 @@ class TestBacktrack:
             [9, 1, 2, 5, 4, 3, 6, 7, 8],
             [8, 3, 5, 2, 7, 6, 4, 1, 9]
         ]
-        solver = Backtrack(Sudoku(board))
+        solver = Backtrack(SudokuBoard(board))
         assert solver.solve() == [True, solution]
 
     def test_solve_hard(self):
@@ -77,7 +77,7 @@ class TestBacktrack:
             [5, 4, 7, 8, 3, 2, 1, 9, 6],
             [8, 6, 1, 4, 7, 9, 5, 3, 2]
         ]
-        solver = Backtrack(Sudoku(board))
+        solver = Backtrack(SudokuBoard(board))
         assert solver.solve() == [True, solution]
     
     def test_solve_impossible(self):
@@ -93,5 +93,5 @@ class TestBacktrack:
             [8, 6, 1, 4, 7, 9, 5, 3, 2]
         ]
         board_copy = [[v for v in row] for row in board]
-        solver = Backtrack(Sudoku(board))
+        solver = Backtrack(SudokuBoard(board))
         assert solver.solve() == [False, board_copy]
