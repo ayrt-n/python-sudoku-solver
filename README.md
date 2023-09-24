@@ -1,6 +1,6 @@
 # Python Sudoku Solver
 
-Sudoku puzzle solver implemented in Python. Uses computer vision to read in images of sudoku boards and then solve!
+Sudoku puzzle solver implemented in Python. Able to read values from and convert images of sudoku boards into array representation... And then solve it!
 
 ## Background
 
